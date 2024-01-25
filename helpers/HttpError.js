@@ -6,7 +6,7 @@ const errorList = {
     409: "Conflict",
 }
 
-const HttpError = (status, message = errorList[status]) => {
+export const HttpError = (status, message = errorList[status]) => {
   const error = new Error(message);
   error.status = status;
   return error;
