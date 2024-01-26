@@ -1,6 +1,7 @@
 import * as contactsService from "../models/contacts.js";
 import {HttpError} from "../helpers/index.js"
 import {contactAddScheme, contactUpdateScheme} from "../schemas/contact-scheme.js"
+import controllerWrapper from "../decorators/controllerWrapper.js";
 
 const getAll = async (req, res, next) => {
   try {
@@ -82,9 +83,9 @@ const deleteById = async (req, res, next) => {
 }
 
 export default {
-  getAll,
-  getById,
-  addContact,
-  updateById,
-  deleteById
+    getAll: controllerWrapper(getAll),
+	getContactById: controllerWrapper(getById),
+	addContact: controllerWrapper(addContact),
+	deleteContact: controllerWrapper(deleteById),
+	updateContactById: controllerWrapper(updateById),
 };
