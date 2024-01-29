@@ -8,12 +8,12 @@ const contactsRouter = express.Router()
 
 contactsRouter.get('/', contactsController.getAll)
 
-contactsRouter.get('/:contactId', contactsController.getContactById)
+contactsRouter.get('/:id', contactsController.getContactById)
 
 contactsRouter.post('/', isEmptyBody, validateBody(contactAddScheme), contactsController.addContact)
 
-contactsRouter.delete('/:contactId', contactsController.deleteContact)
+contactsRouter.delete('/:id', contactsController.deleteContact)
 
-contactsRouter.put('/:contactId', isEmptyBody, validateBody(contactUpdateScheme), contactsController.updateContactById)
+contactsRouter.put('/:id', isEmptyBody, validateBody(contactUpdateScheme), contactsController.updateContactById)
 
 export default contactsRouter
