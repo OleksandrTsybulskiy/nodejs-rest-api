@@ -1,47 +1,42 @@
-import * as contactsService from "../models/contacts.js";
+import Contact from "../models/Contact.js";
 import {HttpError} from "../helpers/index.js"
-import {contactAddScheme, contactUpdateScheme} from "../schemas/contact-scheme.js"
 import controllerWrapper from "../decorators/controllerWrapper.js";
 
-const getAll = async (req, res) => {
-    const result = await contactsService.listContacts();
+export const getAll = async (req, res) => {
+    const result = await Contact.find();
     res.json(result);
 };
 
-const getById = async (req, res) => {
+export const getById = async (req, res) => {
     const {id} = req.params;
-    const result = await contactsService.getContactById(id)
+    const result = await Contact.findById(id)
     if (!result) {
         throw HttpError(404, `Contact with id=${id} not found`)
     }
     res.json(result);
 };
 
-const addContact = async (req, res) => {
-        const {error} = contactAddScheme.validate(req.body)
+export const addContact = async (req, res) => {
+        const {error} = Contact.create(req.body)
         if (error) {
             throw HttpError(400, error.message)
         }
-        const result = await contactsService.addContact(req.body)
+        const result = await Contact.create(req.body)
         res.status(201).json(result)
 }
 
-const updateById = async (req, res) => {
-        const {error} = contactUpdateScheme.validate(req.body)
-        if (error) {
-            throw HttpError(400, error.message)
-        }
+export const updateById = async (req, res) => {
         const {id} = req.params;
-        const result = await contactsService.updateContact(id, req.body)
+        const result = await Contact.findByIdAndUpdate(id, req.body)
         if (!result) {
             throw HttpError(404, `Contact with id=${id} not found`)
         }
         res.json(result);
 }
 
-const deleteById = async (req, res) => {
+export const deleteById = async (req, res) => {
         const {id} = req.params;
-        const result = await contactsService.removeContact(id)
+        const result = await Contact.findByIdAndDelete(id)
         if (!result) {
             throw HttpError(404, `Contact with id=${id} not found`)
         }
@@ -51,9 +46,10 @@ const deleteById = async (req, res) => {
 }
 
 export default {
-    getAll: controllerWrapper(getAll),
+	getAll: controllerWrapper(getAll),
 	getContactById: controllerWrapper(getById),
 	addContact: controllerWrapper(addContact),
 	deleteContact: controllerWrapper(deleteById),
 	updateContactById: controllerWrapper(updateById),
 };
+
