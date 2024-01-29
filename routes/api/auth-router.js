@@ -3,7 +3,7 @@ import authController from "../../controllers/auth-controller.js"
 import { isEmptyBody}  from "../middlewares/index.js";
 import validateBody from "../decorators/validateBody.js";
 import { userSigninScheme, userSignupScheme } from "../models/User.js";
-import authenticate from "../middlewares/authenticate.js";
+import authenticate from "../../middlewares/authenticate.js"
 
 const authRouter = express.Router()
 
