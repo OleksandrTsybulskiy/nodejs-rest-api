@@ -1,4 +1,4 @@
-import bcrypt from "bcryptjs";
+import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 import dotenv from "dotenv";
@@ -9,7 +9,7 @@ dotenv.config();
 
 const { JWT_SECRET } = process.env;
 
-const singup = async (req, res) => {
+export const singup = async (req, res) => {
 	const { email, password } = req.body;
 	const user = await User.findOne({ email });
 
@@ -28,7 +28,7 @@ const singup = async (req, res) => {
 	});
 };
 
-const singin = async (req, res) => {
+export const singin = async (req, res) => {
 	const { email, password } = req.body;
 	const user = await User.findOne({ email });
 	if (!user) {
@@ -55,14 +55,14 @@ const singin = async (req, res) => {
 	});
 };
 
-const signout = async (req, res) => {
+export const signout = async (req, res) => {
 	const { _id } = req.user;
 	await User.findByIdAndUpdate(_id, { token: "" });
 
 	res.status(204).json({ message: "Logout succesfull" });
 };
 
-const getCurrent = async (req, res) => {
+export const getCurrent = async (req, res) => {
 	const { email, subscription } = req.user;
 	res.json({ email, subscription });
 };
