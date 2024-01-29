@@ -16,6 +16,6 @@ contactsRouter.delete('/:id', isValidateId, contactsController.deleteContact)
 
 contactsRouter.put('/:id', isValidateId, isEmptyBody, validateBody(contactUpdateScheme), contactsController.updateContactById)
 
-contactsRouter.patch("/:id/favorite", isEmptyBodyFavorite, isValidateId, validateBody(contactFavoriteScheme), contactsController.updateContactById)
+contactsRouter.patch('/:id/favorite', isEmptyBodyFavorite, isValidateId, validateBody(contactFavoriteScheme), contactsController.updateContactById)
 
 export default contactsRouter

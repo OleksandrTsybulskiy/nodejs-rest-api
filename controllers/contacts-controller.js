@@ -42,7 +42,7 @@ export const deleteById = async (req, res) => {
         }
         res.status(200).json({
             message: "Contact removed"
-        })
+        }) 
 }
 
 export default {
