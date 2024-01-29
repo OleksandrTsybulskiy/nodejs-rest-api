@@ -63,8 +63,8 @@ export const signout = async (req, res) => {
 };
 
 export const getCurrent = async (req, res) => {
-	const { email, subscription } = req.user;
-	res.json({ email, subscription });
+	const { email } = req.user;
+	res.json({ email });
 };
 
 export default {
