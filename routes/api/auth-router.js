@@ -1,8 +1,8 @@
 import express from "express"
 import authController from "../../controllers/auth-controller.js"
-import { isEmptyBody}  from "../../middlewares/index.js";
+import { isEmptyBody }  from "../../middlewares/index.js";
 import validateBody from "../../decorators/validateBody.js";
-import { userSigninScheme, userSignupScheme } from "../../models/User.js";
+import { userSigninScheme, userSignupScheme, userEmailScheme } from "../../models/User.js";
 import authenticate from "../../middlewares/authenticate.js"
 import upload from "../../middlewares/upload.js"
 import resizeAvatar from "../../middlewares/resizeAvatar.js"
@@ -18,5 +18,9 @@ authRouter.post('/logout', authenticate, authController.signout)
 authRouter.get('/current', authenticate, authController.getCurrent)
 
 authRouter.patch('/avatars', upload.single("avatarURL"), isEmptyBody, resizeAvatar, authenticate, authController.updateAvatar)
+
+authRouter.get("/verify/:verificationToken", authController.verify)
+
+authRouter.post("/verify", isEmptyBody, validateBody(userEmailScheme), authController.resendVerificationEmail)
 
 export default authRouter
