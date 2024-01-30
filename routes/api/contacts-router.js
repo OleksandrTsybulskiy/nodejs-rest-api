@@ -8,7 +8,7 @@ const contactsRouter = express.Router()
 
 contactsRouter.get('/', contactsController.getAll)
 
-contactsRouter.get('/:id', contactsController.getContactById)
+contactsRouter.get('/:id', isValidateId, contactsController.getContactById)
 
 contactsRouter.post('/', isEmptyBody, validateBody(contactAddScheme), contactsController.addContact)
 
