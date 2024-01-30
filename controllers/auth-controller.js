@@ -1,13 +1,18 @@
 import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken";
-import User from "../models/User.js";
 import dotenv from "dotenv";
+import fs from "fs/promises"
+import path from "path";
+import gravatar from "gravatar";
+
+import User from "../models/User.js";
 import { HttpError } from "../helpers/index.js";
 import controllerWrapper from "../decorators/controllerWrapper.js";
 
 dotenv.config();
 
 const { JWT_SECRET } = process.env;
+const avatarPath = path.resolve("public", "avatars") 
 
 export const singup = async (req, res) => {
 	const { email, password } = req.body;
@@ -19,11 +24,25 @@ export const singup = async (req, res) => {
 
 	const hashPassword = await bcrypt.hash(password, 10);
 
-	const newUser = await User.create({ ...req.body, password: hashPassword });
+	let avatarURL = gravatar.url(email, {
+		s: "200",
+		r: "pg",
+		d: "avatar",
+	});
+	console.log(avatarURL);
+	if (req.file) {
+		const { path: oldPath, filename } = req.file;
+		const newPath = path.join(avatarPath, filename);
+		await fs.rename(oldPath, newPath);
+		avatarURL = path.join("avatars", filename);
+	}
+
+	const newUser = await User.create({ ...req.body, password: hashPassword, avatarURL });
 
 	res.status(201).json({
 		user: {
 			email: newUser.email,
+			avatarURL: newUser.avatarURL,
 		},
 	});
 };
@@ -67,9 +86,34 @@ export const getCurrent = async (req, res) => {
 	res.json({ email });
 };
 
+const updateAvatar = async (req, res) => {
+	const { token } = req.user;
+	let avatarURL = req.user.avatarURL;
+	if (req.file) {
+		const { path: oldPath, filename } = req.file;
+		const newPath = path.join(avatarPath, filename);
+		await fs.rename(oldPath, newPath);
+		avatarURL = path.join("avatars", filename);
+	}
+
+	const result = await User.findOneAndUpdate({ token }, { avatarURL }, { new: true });
+	if (!result) {
+		throw HttpError(404, "User not found");
+	}
+	if (req.user.avatarURL) {
+		const oldAvatarPath = path.join(path.resolve("public", req.user.avatarURL));
+		await fs.unlink(oldAvatarPath);
+	}
+
+	res.json({
+		avatarURL: result.avatarURL,
+	});
+};
+
 export default {
 	singup: controllerWrapper(singup),
 	singin: controllerWrapper(singin),
 	signout: controllerWrapper(signout),
 	getCurrent: controllerWrapper(getCurrent),
+	updateAvatar: controllerWrapper(updateAvatar),
 };
