@@ -24,6 +24,7 @@ export const singup = async (req, res) => {
 	res.status(201).json({
 		user: {
 			email: newUser.email,
+			subsription: newUser.subscription
 		},
 	});
 };
@@ -51,6 +52,7 @@ export const singin = async (req, res) => {
 		token,
 		user: {
 			email: user.email,
+			subsription: user.subscription
 		},
 	});
 };
@@ -63,8 +65,8 @@ export const signout = async (req, res) => {
 };
 
 export const getCurrent = async (req, res) => {
-	const { email } = req.user;
-	res.json({ email });
+	const { email, subscription } = req.user;
+	res.json({ email, subscription });
 };
 
 export default {

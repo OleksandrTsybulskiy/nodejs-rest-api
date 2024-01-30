@@ -3,6 +3,7 @@ import Joi from "joi";
 import { handleSaveError, preUpdate } from "./hooks.js";
 
 const emailPattern = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+const subscriptionValue = ["starter", "pro", "business"];
 
 const userSchema = new Schema(
 	{
@@ -14,6 +15,11 @@ const userSchema = new Schema(
 			type: String,
 			required: [true, "Email is required"],
 			unique: true,
+		},
+		subscription: {
+			type: String,
+			enum: subscriptionValue,
+			default: "starter"
 		},
 		token: String,
 	},
