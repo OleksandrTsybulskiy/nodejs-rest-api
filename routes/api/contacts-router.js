@@ -5,6 +5,7 @@ import validateBody from "../../decorators/validateBody.js"
 import { contactAddScheme, contactUpdateScheme, contactFavoriteScheme } from "../../models/Contact.js"
 
 const contactsRouter = express.Router()
+contactsRouter.use(authenticate);
 
 contactsRouter.get('/', contactsController.getAll)
 
