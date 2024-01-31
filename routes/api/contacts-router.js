@@ -3,7 +3,7 @@ import contactsController from "../../controllers/contacts-controller.js"
 import { isEmptyBody, isValidateId, isEmptyBodyFavorite} from "../../middlewares/index.js"
 import validateBody from "../../decorators/validateBody.js"
 import { contactAddScheme, contactUpdateScheme, contactFavoriteScheme } from "../../models/Contact.js"
-import { authenticate } from './../../middlewares/authenticate';
+import { authenticate } from '../../middlewares/authenticate.js';
 
 const contactsRouter = express.Router()
 contactsRouter.use(authenticate);
