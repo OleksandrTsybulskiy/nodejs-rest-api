@@ -17,6 +17,6 @@ authRouter.post('/logout', authenticate, authController.signout)
 
 authRouter.get('/current', authenticate, authController.getCurrent)
 
-authRouter.patch('/avatars', authenticate, upload.single("avatarURL"), isEmptyBody, resizeAvatar, authController.updateAvatar)
+authRouter.patch('/avatars', authenticate, upload.single("avatarURL"), resizeAvatar, authController.updateAvatar)
 
 export default authRouter

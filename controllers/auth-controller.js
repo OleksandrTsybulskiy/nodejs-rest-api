@@ -91,13 +91,16 @@ export const getCurrent = async (req, res) => {
 const updateAvatar = async (req, res) => {
 	const { _id, avatarURL: oldURL } = req.user;
 	let avatarURL = req.user.avatarURL;
-	if (req.file) {
-		const { path: oldPath, filename } = req.file;
-		const newPath = path.join(avatarPath, filename);
-		await fs.rename(oldPath, newPath);
-		avatarURL = path.join("avatars", filename);
+
+	if (!req.file) {
+		throw HttpError(400, "Avatar file is missing");
 	}
 
+	const { path: oldPath, filename } = req.file;
+	const newPath = path.join(avatarPath, filename);
+	await fs.rename(oldPath, newPath);
+	avatarURL = path.join("avatars", filename);
+	
 	const result = await User.findOneAndUpdate({ _id }, { avatarURL }, { new: true });
 	if (!result) {
 		throw HttpError(404, "User not found");
