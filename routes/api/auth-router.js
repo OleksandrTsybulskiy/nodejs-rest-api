@@ -17,7 +17,7 @@ authRouter.post('/logout', authenticate, authController.signout)
 
 authRouter.get('/current', authenticate, authController.getCurrent)
 
-authRouter.patch('/avatars', upload.single("avatarURL"), isEmptyBody, resizeAvatar, authenticate, authController.updateAvatar)
+authRouter.patch('/avatars', authenticate, upload.single("avatarURL"), isEmptyBody, resizeAvatar, authController.updateAvatar)
 
 authRouter.get("/verify/:verificationToken", authController.verify)
 

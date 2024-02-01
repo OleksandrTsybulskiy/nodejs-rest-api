@@ -105,7 +105,7 @@ export const getCurrent = async (req, res) => {
 };
 
 const updateAvatar = async (req, res) => {
-	const { token } = req.user;
+	const { _id, avatarURL: oldURL } = req.user;
 	let avatarURL = req.user.avatarURL;
 	if (req.file) {
 		const { path: oldPath, filename } = req.file;
@@ -114,14 +114,15 @@ const updateAvatar = async (req, res) => {
 		avatarURL = path.join("avatars", filename);
 	}
 
-	const result = await User.findOneAndUpdate({ token }, { avatarURL }, { new: true });
+	const result = await User.findOneAndUpdate({ _id }, { avatarURL }, { new: true });
 	if (!result) {
 		throw HttpError(404, "User not found");
 	}
-	if (req.user.avatarURL) {
-		const oldAvatarPath = path.join(path.resolve("public", req.user.avatarURL));
-		await fs.unlink(oldAvatarPath);
-	}
+	
+	if (oldURL.startsWith('avatars')) {
+        const oldAvatarPath = path.resolve('public', oldURL);       
+        await fs.unlink(oldAvatarPath);
+    }  
 
 	res.json({
 		avatarURL: result.avatarURL,
