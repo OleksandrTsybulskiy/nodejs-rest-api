@@ -103,8 +103,8 @@ const updateAvatar = async (req, res) => {
 		throw HttpError(404, "User not found");
 	}
 
-	if(oldURL.startsWith('avatars')){//видалення старого файлу, якщо він був
-        const oldAvatarPath = path.resolve('public', oldURL);//шлях до старого файлу        
+	if (oldURL.startsWith('avatars')) {
+        const oldAvatarPath = path.resolve('public', oldURL);       
         await fs.unlink(oldAvatarPath);
     }     
 
